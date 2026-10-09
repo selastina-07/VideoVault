@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VideoVault | Smart Video Download Management System</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #020c19, #071325 55%, #101c2f);
+        color: #ebf3ff;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .card {
+        width: min(420px, calc(100vw - 32px));
+        background: rgba(16, 28, 47, 0.95);
+        border: 1px solid rgba(148, 163, 184, 0.25);
+        border-radius: 18px;
+        padding: 28px;
+        box-shadow: 0 18px 40px rgba(2, 6, 23, 0.45);
+      }
+      h1 { margin-top: 0; }
+      label { display: block; margin-top: 16px; color: #dbeafe; font-size: 14px; }
+      input {
+        width: 100%; margin-top: 8px; border-radius: 10px; border: 1px solid rgba(148, 163, 184, 0.3);
+        background: #0f172a; color: #f8fafc; padding: 12px 14px; font-size: 15px;
+      }
+      button {
+        width: 100%; margin-top: 20px; border: none; border-radius: 10px; background: #38bdf8; color: #042033;
+        font-weight: 700; padding: 12px 14px; cursor: pointer;
+      }
+      .meta {
+        margin-top: 16px; color: #a8bfdc; font-size: 13px; display: grid; gap: 8px;
+      }
+      .status { margin-top: 16px; min-height: 20px; color: #fca5a5; }
+      .brand { color: #38bdf8; letter-spacing: -0.04em; font-size: 30px; }
+      .tagline { color: #a8bfdc; line-height: 1.5; }
+      .eyebrow { color: #38bdf8; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="eyebrow">Secure downloads, organized</div>
+      <h1 class="brand">VideoVault</h1>
+      <p class="tagline">Smart Video Download Management System. Sign in to browse videos, manage your plan quota, and revisit your download history.</p>
+      <form id="loginForm">
+        <label>
+          Email
+          <input name="email" type="email" value="free@videovault.test" required />
+        </label>
+        <label>
+          Password
+          <input name="password" type="password" value="password123" required />
+        </label>
+        <button type="submit">Log in</button>
+      </form>
+      <div class="meta">
+        <span>Demo sign-ins: free@videovault.test, bronze@videovault.test, silver@videovault.test, gold@videovault.test</span>
+        <span>Password for all demo users: password123</span>
+      </div>
+      <div id="status" class="status" aria-live="polite"></div>
+    </div>
+
+    <script>
+      const form = document.getElementById('loginForm');
+      const status = document.getElementById('status');
+      let csrfToken = '';
+      fetch('/api/csrf')
+        .then((response) => response.json())
+        .then((payload) => { csrfToken = payload.csrfToken; })
+        .catch(() => { status.textContent = 'Could not initialize secure login.'; });
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        status.textContent = '';
+        if (!csrfToken) {
+          status.textContent = 'Secure login is not ready. Refresh and try again.';
+          return;
+        }
+        const formData = new FormData(form);
+        const body = Object.fromEntries(formData.entries());
+
+        try {
+          const response = await fetch('/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken },
+            body: JSON.stringify(body),
+          });
+          const payload = await response.json();
+          if (!response.ok) {
+            status.textContent = payload.error || 'Login failed.';
+            return;
+          }
+          csrfToken = payload.csrfToken;
+          window.location.href = payload.redirect || '/profile';
+        } catch (error) {
+          status.textContent = 'Login request failed.';
+        }
+      });
+    </script>
+  </body>
+</html>

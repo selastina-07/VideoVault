@@ -1,0 +1,19 @@
+{
+  "name": "videovault-downloads",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Subscription-aware video downloads with auditable quota enforcement",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=22.13"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "express": "^5.1.0"
+  }
+}

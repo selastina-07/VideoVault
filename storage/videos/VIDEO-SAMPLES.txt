@@ -1,0 +1,14 @@
+Demo MP4 sample credits
+
+These files are sample media created by Samplelib and are provided by the
+publisher free of charge and without license restrictions:
+https://samplelib.com/
+
+Files used:
+- alpha-summit.mp4: https://samplelib.com/preview/mp4/sample-5s-360p.mp4
+- mountain-drift.mp4: https://samplelib.com/preview/mp4/sample-10s-360p.mp4
+- city-pulse.mp4: https://samplelib.com/preview/mp4/sample-15s-360p.mp4
+- night-ride.mp4: https://samplelib.com/preview/mp4/sample-20s-360p.mp4
+
+The displayed VideoVault titles and thumbnails are catalog labels; the bundled
+clips are generic sample videos and are not footage matching those labels.
